@@ -226,20 +226,5 @@ Status tokens map automatically between Markdown and the Kanban board:
 
 ---
 
-## Licensing Options & Distribution Guide
-
-Depending on how you want to distribute or monetize **Content Studio**, choose one of the three standard licensing models below and place the corresponding `LICENSE` file in the project root:
-
-| License Model | Best For | What Users Can Do | How You Monetize / Benefit |
-| :--- | :--- | :--- | :--- |
-| **1. Permissive Open Source (`MIT` or `Apache-2.0`)** | Portfolio flagship, landing engineering jobs, `Show HN` / GitHub stars | Anyone can use, modify, and redistribute the code (Apache 2.0 also adds an explicit patent grant) | Maximizes recruiter/hiring-manager reach, consulting inbound leads, and community contributions |
-| **2. Source-Available / Fair-Code (`FSL-1.1-MIT` or `BSL 1.1`)** | Public GitHub repo while preventing competitors from reselling your app | Code is readable on GitHub and free for personal/non-competing use, but commercial resale or hosted competing SaaS is prohibited | Proves your code quality publicly to employers while protecting your commercial SaaS or paid desktop license rights |
-| **3. Commercial / Proprietary EULA (`All Rights Reserved`)** | Selling one-time desktop licenses ($19–$49 on Gumroad / Lemon Squeezy) or private client builds | Buyers receive a license to run the software on their own machines, without redistribution or resale rights | Direct revenue from one-time downloads, agency seat licenses, or done-for-you client installations |
-
-### Dual-Licensing Strategy (Recommended if Doing Both Job Hunting & Sales)
-As the sole copyright holder, you can use **dual licensing**:
-1. Publish a core version on GitHub under **MIT** or **Functional Source License (FSL)** as your public engineering portfolio piece.
-2. Sell a packaged **Pro Edition** (with pre-built Windows/macOS/Linux launchers, curated industry prompt packs, and custom voice templates) under a **Commercial EULA**.
-
 ### Active Project License
 This repository is released under the **MIT License** — see [LICENSE](./LICENSE) for full terms.
