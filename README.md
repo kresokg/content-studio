@@ -1,6 +1,40 @@
 # Content Studio & Automated Social Content Pipeline
 
-A local-first, zero-dependency **Text & Markdown Content Studio** and RSS/notes pipeline for **LinkedIn**, **X (Twitter)**, and **Threads**. Built entirely with the Python 3.10+ standard library and vanilla HTML/CSS/JavaScript—no frameworks, no external packages, and no cloud lock-in.
+## Why Content Studio Exists
+
+Most tools for social media writing, scheduling and automating lock your data inside a proprietary cloud database and charge money
+
+**Content Studio** takes the opposite approach:
+1. **Local-First Plain Markdown:** Every draft (`queue/YYYY-MM-DD/*.md`) and rough note (`notes/*.md`) lives as a portable, human-readable Markdown file on your own disk. You can edit files in the web UI, VS Code, Obsidian, or Git interchangeably.
+2. **Zero Third-Party Dependencies:** The entire backend runs on the stock **Python 3.10+ standard library** (`http.server`, `urllib.request`, `xml.etree.ElementTree`, `pathlib`, `json`, `re`), paired with a framework-free vanilla HTML/CSS/JS frontend. No `pip install`, no `node_modules`, and zero dependency rot.
+3. **Bring Your Own AI (or Run 100% Offline):** A unified ~420-line LLM router (`ai_client.py`) connects directly to **Google Gemini**, **OpenAI**, **Anthropic Claude**, **OpenRouter**, local **Ollama** open-weight models, or any **Custom OpenAI-Compatible Endpoint**—plus an offline template mode. API keys are stored locally in `.ai_secrets.json` with strict `0600` owner-only permissions.
+4. **Cross-Platform Out of the Box:** Runs natively on **Linux**, **Windows 10/11**, and **macOS** with a single `python3 studio.py` command.
+
+---
+
+## How the 4-Stage Workflow Works
+
+### Stage 1 — Discover Feed Inbox (`discover.py`)
+- Pulls fresh posts from your configured RSS 2.0 and Atom feeds into a centered inbox without cluttering your draft queue.
+- Each feed card provides **Open Original ↗**, **Delete**, and **Send to Studio →** (which automatically fetches the source URL, strips layout noise, and extracts full readable article text into a raw Markdown draft—falling back gracefully to the RSS summary if a site blocks scraping).
+
+### Stage 2 — Multi-Platform Studio Editor (`studio.py` + `web/`)
+- **Draft Queue:** Filter by status (`All`, `Draft`, `Ready`, `Scheduled`, `Published`, `Archived`), search across hooks/titles/sources, and delete in 1 click with an **Undo** toast.
+- **Studio AI Editing Suite:** Write custom editing instructions, apply 1-click **Saved Prompt Templates**, switch **Voice & Tone Profiles**, click **Adapt for Platform**, and step back anytime with multi-step **Undo**.
+- **Live Platform Previews & Character Meters:**
+  - **LinkedIn:** `210`-char above-the-fold hook progress bar (`...see more` fold toggle) and `3,000`-char limit.
+  - **X (Twitter):** `280`-char single-post meter plus automatic multi-post thread preview split on blank lines (`1/N · chars/280`).
+  - **Threads:** `500`-char meter and live Threads card preview.
+  - Supports **Desktop / Mobile** width preview, **Card: Light / Dark**, and **Obsidian Dark / Daylight Light** app themes.
+
+### Stage 3 — 5-Stage Kanban Board & Publish Scheduler
+- Drag and drop cards across `Draft → Ready → Scheduled → Published → Archived` and filter by target platform.
+- Schedule publish dates and times using 1-click presets, export `.ics` calendar reminders, and receive **in-app due notifications** (top alert banner + notification bell popover) with 1-click **Copy & Publish**.
+
+### Stage 4 — Quick Idea Capture (`Notes` Tab & CLI Batch Pipeline)
+- Capture rough ideas as plain `.md` files in `notes/` or click **Save & Draft Now** to turn a note directly into a queue draft.
+- Includes `pipeline.py` for optional headless CLI batch drafting via cron.
+
 
 ---
 
