@@ -1,0 +1,81 @@
+{
+  "niche": "Software Engineering, AI & Tech Careers",
+  "audience": "developers, hiring managers, and tech builders",
+  "tone": "conversational, practical, and insightful (no corporate jargon)",
+  "max_items_per_run": 5,
+  "notes_dir": "notes",
+  "output_dir": "queue",
+  "state_file": ".pipeline_state.json",
+  "gemini_model": "gemini-2.5-flash",
+  "feeds": [
+    {
+      "name": "Hacker News",
+      "url": "https://hnrss.org/frontpage?count=10"
+    },
+    {
+      "name": "GitHub Blog",
+      "url": "https://github.blog/feed/"
+    },
+    {
+      "name": "Dev.to",
+      "url": "https://dev.to/feed"
+    }
+  ],
+  "default_hashtags": [
+    "#SoftwareEngineering",
+    "#AI",
+    "#TechCareers",
+    "#BuildInPublic"
+  ],
+  "ai": {
+    "provider": "local_templates",
+    "model": "",
+    "base_url": "",
+    "temperature": 0.7
+  },
+  "profile": {
+    "name": "Your Name",
+    "handle": "yourhandle",
+    "headline": "Software Engineer \u00b7 AI Builder"
+  },
+  "prompt_templates": [
+    {
+      "id": "tpl-takeaways",
+      "name": "3 Practical Takeaways",
+      "prompt": "Rewrite this with a punchy opening hook, 3 concise bulleted takeaways, and one discussion question at the end."
+    },
+    {
+      "id": "tpl-hook",
+      "name": "Sharpen Hook",
+      "prompt": "Keep the core ideas, but rewrite the opening 2 lines into a scroll-stopping hook."
+    },
+    {
+      "id": "tpl-story",
+      "name": "Builder Story",
+      "prompt": "Reframe this as a first-person story highlighting the real problem, what changed, and the practical lesson."
+    },
+    {
+      "id": "tpl-concise",
+      "name": "Make Concise",
+      "prompt": "Tighten the post by ~35% for crisp mobile reading while keeping the key insight."
+    }
+  ],
+  "voice_profiles": [
+    {
+      "id": "voice-direct",
+      "name": "Direct Engineer",
+      "instructions": "Clear, pragmatic software engineer voice. Grounded, concrete, short sentences, zero corporate fluff."
+    },
+    {
+      "id": "voice-conversational",
+      "name": "Conversational Builder",
+      "instructions": "Warm, approachable peer-to-peer builder tone. Curious, honest, and easy to read."
+    },
+    {
+      "id": "voice-sharp",
+      "name": "Sharp & Opinionated",
+      "instructions": "Confident, concise, thoughtful contrarian angle backed by practical experience\u2014never clickbait."
+    }
+  ],
+  "active_voice_id": "voice-direct"
+}

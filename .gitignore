@@ -1,0 +1,17 @@
+# Sensitive local API keys & runtime state
+.ai_secrets.json
+.inbox_cache.json
+.inbox_state.json
+.pipeline_state.json
+studio.log
+
+# Compiled Python bytecode (contains local absolute file paths!)
+__pycache__/
+*.py[cod]
+*$py.class
+
+# OS & Editor metadata
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

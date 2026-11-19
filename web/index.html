@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Content Studio</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%232D8CFF'/%3E%3Cstop offset='100%25' stop-color='%230A66C2'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ctext x='32' y='44' text-anchor='middle' fill='%23ffffff' font-family='system-ui,-apple-system,sans-serif' font-size='32' font-weight='800' letter-spacing='-1.5'%3ECS%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Frosted Glass Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="brand">
+          <span class="brand-badge" aria-hidden="true">CS</span>
+          <div class="brand-text">
+            <h1>Content Studio</h1>
+            <span class="brand-sub">Text &amp; Markdown</span>
+          </div>
+        </div>
+
+        <button type="button" id="btn-ai-connect" class="ai-connect-btn" title="Connect or switch AI model">
+          <span class="pulse-dot" aria-hidden="true"></span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+          <span id="ai-connect-label">AI: Local Templates</span>
+          <span class="ai-caret" aria-hidden="true">▾</span>
+        </button>
+      </div>
+
+      <nav class="view-tabs" aria-label="Primary Views">
+        <button type="button" class="tab-btn" data-view="discover">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+          <span>Discover</span>
+          <span id="nav-discover-count" class="nav-pill">0</span>
+        </button>
+        <button type="button" class="tab-btn active" data-view="studio">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          <span>Studio</span>
+        </button>
+        <button type="button" class="tab-btn" data-view="board">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="15" x="3" y="4" rx="1.5"/><rect width="7" height="9" x="14" y="4" rx="1.5"/></svg>
+          <span>Board</span>
+          <span id="nav-board-count" class="nav-pill">0</span>
+        </button>
+        <button type="button" class="tab-btn" data-view="notes">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span>Notes</span>
+          <span id="nav-notes-count" class="nav-pill">0</span>
+        </button>
+        <button type="button" class="tab-btn" data-view="settings">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span>Settings</span>
+        </button>
+      </nav>
+
+      <div class="topbar-actions">
+        <div class="notif-wrap">
+          <button type="button" id="btn-notifications" class="btn btn-icon-label notif-btn" title="In-app scheduled post alerts" aria-label="Scheduled notifications">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            <span id="notif-badge" class="notif-badge hidden">0</span>
+          </button>
+
+          <div id="notif-popover" class="notif-popover hidden" role="region" aria-label="In-app alerts">
+            <div class="notif-pop-head">
+              <strong>Scheduled Alerts</strong>
+              <span id="notif-pop-sub" class="muted small">In-app only</span>
+            </div>
+            <div id="notif-pop-list" class="notif-pop-list"></div>
+          </div>
+        </div>
+
+        <button type="button" id="btn-theme-toggle" class="btn btn-icon-label" title="Switch between Dark and Light mode" aria-label="Toggle color theme">
+          <svg id="theme-icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+          <svg id="theme-icon-moon" class="hidden" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+          <span id="theme-label">Light</span>
+        </button>
+
+        <button type="button" id="btn-new-draft" class="btn btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          <span>New Draft</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- In-App Due Post Alert Banner -->
+    <div id="due-banner" class="due-banner hidden" role="status">
+      <div class="due-banner-left">
+        <span class="due-dot" aria-hidden="true"></span>
+        <span id="due-banner-text">1 scheduled post is due now</span>
+      </div>
+      <div class="due-banner-actions">
+        <button type="button" id="btn-due-copy-publish" class="btn btn-xs btn-primary">Copy &amp; Publish</button>
+        <button type="button" id="btn-due-open-board" class="btn btn-xs btn-secondary">View on Board</button>
+        <button type="button" id="btn-due-dismiss" class="icon-btn" aria-label="Dismiss alert">✕</button>
+      </div>
+    </div>
+
+    <!-- Main Workspace -->
+    <main class="main-content">
+      <!-- DISCOVER INBOX VIEW -->
+      <section id="view-discover" class="view-panel">
+        <div class="discover-layout">
+          <div class="discover-toolbar">
+            <div class="discover-toolbar-left">
+              <button type="button" id="btn-discover-fetch" class="btn btn-primary">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
+                <span>Fetch Feeds</span>
+              </button>
+              <button type="button" id="btn-discover-reset" class="btn btn-secondary">Reset Skipped</button>
+            </div>
+
+            <div class="discover-toolbar-right">
+              <div class="discover-platform-wrap">
+                <label for="discover-platform" class="muted small">Draft for</label>
+                <select id="discover-platform" class="select select-xs" aria-label="Target platform">
+                  <option value="linkedin">LinkedIn</option>
+                  <option value="x">X (Twitter)</option>
+                  <option value="threads">Threads</option>
+                </select>
+              </div>
+              <div class="search-wrap discover-search-wrap">
+                <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="search" id="discover-search" class="input input-search" placeholder="Filter feed inbox..." aria-label="Filter feed inbox" />
+              </div>
+            </div>
+          </div>
+
+          <section class="panel discover-inbox-panel">
+            <div class="panel-header">
+              <h2>Feed Inbox</h2>
+              <span id="discover-total-count" class="count-pill">0</span>
+            </div>
+            <div id="discover-list" class="discover-feed-list" role="list"></div>
+          </section>
+        </div>
+      </section>
+
+      <!-- STUDIO VIEW -->
+      <section id="view-studio" class="view-panel active">
+        <div class="studio-grid">
+          <!-- Left Column: Queue -->
+          <aside class="panel queue-panel">
+            <div class="panel-header">
+              <h2>Draft Queue</h2>
+              <span id="queue-total-count" class="count-pill">0</span>
+            </div>
+
+            <div class="queue-controls">
+              <div class="search-wrap">
+                <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="search" id="queue-search" class="input input-search" placeholder="Search drafts, hooks, sources..." aria-label="Search drafts" />
+              </div>
+
+              <div id="status-filters" class="filter-pills" role="group" aria-label="Status filter">
+                <button type="button" class="filter-pill active" data-status="all">All <span data-count="all">0</span></button>
+                <button type="button" class="filter-pill" data-status="draft">Draft <span data-count="draft">0</span></button>
+                <button type="button" class="filter-pill" data-status="ready">Ready <span data-count="ready">0</span></button>
+                <button type="button" class="filter-pill" data-status="scheduled">Scheduled <span data-count="scheduled">0</span></button>
+                <button type="button" class="filter-pill" data-status="published">Published <span data-count="published">0</span></button>
+                <button type="button" class="filter-pill" data-status="archived">Archived <span data-count="archived">0</span></button>
+              </div>
+            </div>
+
+            <div id="queue-list" class="queue-list" role="list"></div>
+          </aside>
+
+          <!-- Center Column: Composer & Custom AI Prompt Box -->
+          <section class="panel editor-panel">
+            <div id="editor-empty" class="empty-state hidden">
+              <div class="empty-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+              </div>
+              <h3>No draft selected</h3>
+              <p>Pick a draft from the queue, inspect articles in Discover, or create a blank post.</p>
+              <button type="button" id="btn-empty-new" class="btn btn-primary">+ Create Blank Draft</button>
+            </div>
+
+            <div id="editor-workspace" class="editor-workspace">
+              <div class="editor-top">
+                <div class="editor-meta-row">
+                  <input type="text" id="edit-title" class="input input-title" placeholder="Draft headline / working title..." aria-label="Draft title" />
+                  <div class="editor-selects">
+                    <select id="edit-platform" class="select" aria-label="Target social platform">
+                      <option value="linkedin">LinkedIn</option>
+                      <option value="x">X (Twitter)</option>
+                      <option value="threads">Threads</option>
+                    </select>
+                    <select id="edit-status" class="select" aria-label="Draft status">
+                      <option value="draft">Draft</option>
+                      <option value="ready">Ready</option>
+                      <option value="scheduled">Scheduled</option>
+                      <option value="published">Published</option>
+                      <option value="archived">Archived</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="editor-source-bar">
+                  <span id="edit-source-display">Source: —</span>
+                  <div class="editor-source-right">
+                    <button type="button" id="btn-editor-schedule" class="schedule-pill" title="Schedule post publish time">Schedule</button>
+                    <span id="unsaved-indicator" class="unsaved-badge hidden">● Unsaved changes</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="quick-insert-bar" role="toolbar" aria-label="Quick insert">
+                <span class="toolbar-label">Insert</span>
+                <button type="button" class="chip-btn" data-insert="→ ">→ Arrow</button>
+                <button type="button" class="chip-btn" data-insert="• ">• Bullet</button>
+                <button type="button" class="chip-btn" data-insert-action="divider">— Divider</button>
+                <div class="ai-rewrite-group">
+                  <button type="button" id="btn-adapt-platform" class="btn btn-xs btn-secondary" title="Adapt current text cleanly for selected platform using AI">Adapt for Platform</button>
+                </div>
+              </div>
+
+              <div class="editor-body-wrap">
+                <textarea id="edit-post-copy" class="textarea post-textarea" placeholder="Write or paste your post here, then refine it manually or with a custom AI prompt below..." aria-label="Post copy"></textarea>
+
+                <div class="hook-progress-row">
+                  <div class="hook-progress-track" aria-hidden="true">
+                    <div id="hook-progress-fill" class="hook-progress-fill ok"></div>
+                  </div>
+                  <div class="stats-bar">
+                    <span id="hook-meter" class="meter meter-ok">Hook: 0 / 210 · Fits above fold</span>
+                    <div class="stats-right">
+                      <span id="read-time" class="meter-subtle">~0s read</span>
+                      <span id="total-meter" class="meter-subtle mono">0 / 3000</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Studio AI Custom Prompt Bar, Templates & Voice Profile -->
+              <div class="ai-studio-box">
+                <div class="ai-studio-top">
+                  <div class="ai-voice-group">
+                    <label for="studio-voice-select">Voice &amp; Tone</label>
+                    <select id="studio-voice-select" class="select select-xs" aria-label="Voice and tone profile"></select>
+                  </div>
+                  <div class="ai-manage-btns">
+                    <button type="button" id="btn-manage-voices" class="btn btn-xs btn-secondary">Manage Voices</button>
+                    <button type="button" id="btn-manage-templates" class="btn btn-xs btn-secondary">Manage Templates</button>
+                  </div>
+                </div>
+
+                <div id="studio-template-chips" class="preset-chips" aria-label="Saved AI prompt templates"></div>
+
+                <div class="ai-prompt-row">
+                  <textarea id="studio-ai-prompt" class="textarea ai-prompt-textarea" rows="2" placeholder="Write a custom AI prompt to edit this post (e.g., 'Turn this into 3 sharp lessons for developers')..." aria-label="Custom AI editing prompt"></textarea>
+                  <div class="ai-prompt-actions">
+                    <button type="button" id="btn-run-prompt" class="btn btn-ai">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                      <span>Run Prompt</span>
+                    </button>
+                    <div class="ai-prompt-sub-actions">
+                      <button type="button" id="btn-ai-undo" class="btn btn-xs btn-secondary" disabled title="Undo last AI or template edit">↶ Undo</button>
+                      <button type="button" id="btn-quick-save-template" class="btn btn-xs btn-secondary" title="Save this prompt as a reusable template">Save Template</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="editor-actions">
+                <div class="action-group-left">
+                  <button type="button" id="btn-save-draft" class="btn btn-primary">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                    <span>Save</span>
+                    <kbd>Ctrl+S</kbd>
+                  </button>
+                  <button type="button" id="btn-copy-post" class="btn btn-secondary">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                    <span>Copy Post</span>
+                  </button>
+                </div>
+                <button type="button" id="btn-delete-draft" class="btn btn-danger-ghost">Delete</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Right Column: Live Multi-Platform Preview -->
+          <aside class="panel preview-panel">
+            <div class="panel-header preview-header">
+              <h2 id="preview-platform-title">LinkedIn Preview</h2>
+              <div class="preview-toggles">
+                <div class="segmented" role="group" aria-label="Preview device width">
+                  <button type="button" class="seg-btn active" data-device="desktop" title="Desktop feed width">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+                    <span>Desktop</span>
+                  </button>
+                  <button type="button" class="seg-btn" data-device="mobile" title="Mobile feed width">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/></svg>
+                    <span>Mobile</span>
+                  </button>
+                </div>
+
+                <button type="button" id="btn-li-theme" class="btn btn-xs btn-secondary" title="Toggle social card appearance">Card: Light</button>
+                <button type="button" id="btn-toggle-expand" class="btn btn-xs btn-secondary">Folded (...see more)</button>
+              </div>
+            </div>
+
+            <div class="preview-stage">
+              <div id="linkedin-frame" class="linkedin-frame desktop">
+                <div id="preview-card-root"></div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- BOARD VIEW (KANBAN) -->
+      <section id="view-board" class="view-panel">
+        <div class="board-header">
+          <div>
+            <h2>Content Pipeline Board</h2>
+            <p class="muted">Drag cards across stages, schedule publish slots, or copy &amp; publish when due.</p>
+          </div>
+          <div class="board-header-right">
+            <div id="board-platform-filters" class="filter-pills" role="group" aria-label="Filter board by platform">
+              <button type="button" class="filter-pill active" data-board-platform="all">All Platforms</button>
+              <button type="button" class="filter-pill" data-board-platform="linkedin">LinkedIn</button>
+              <button type="button" class="filter-pill" data-board-platform="x">X</button>
+              <button type="button" class="filter-pill" data-board-platform="threads">Threads</button>
+            </div>
+            <div class="board-pills">
+              <span id="board-due-pill" class="schedule-pill due hidden">0 due now</span>
+              <span id="board-scheduled-pill" class="schedule-pill">0 scheduled</span>
+              <span id="board-summary" class="count-pill">0 total drafts</span>
+            </div>
+          </div>
+        </div>
+        <div id="kanban-board" class="kanban-grid"></div>
+      </section>
+
+      <!-- NOTES VIEW -->
+      <section id="view-notes" class="view-panel">
+        <div class="notes-grid">
+          <div class="panel note-capture-panel">
+            <div class="panel-header">
+              <h2>Quick Idea Capture</h2>
+              <span class="muted small">Saved as Markdown in notes/</span>
+            </div>
+            <form id="note-form" class="note-form">
+              <div class="field">
+                <label for="note-title">Idea / Working Title</label>
+                <input type="text" id="note-title" class="input" placeholder="e.g., What debugging a race condition taught me" />
+              </div>
+              <div class="field field-grow">
+                <label for="note-content">Rough Notes &amp; Key Takeaways</label>
+                <textarea id="note-content" class="textarea" rows="10" placeholder="Jot down bullet points, a quick story, real metrics, or a lesson learned..."></textarea>
+              </div>
+              <div class="note-form-actions">
+                <button type="button" id="btn-save-note" class="btn btn-secondary">Save Note</button>
+                <button type="button" id="btn-save-draft-note" class="btn btn-primary">Save &amp; Draft Now</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="panel notes-list-panel">
+            <div class="panel-header">
+              <h2>Saved Notes</h2>
+              <span id="notes-count" class="count-pill">0</span>
+            </div>
+            <div id="notes-list" class="notes-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SETTINGS VIEW -->
+      <section id="view-settings" class="view-panel">
+        <div class="settings-layout">
+          <div class="settings-header-row">
+            <div>
+              <h2>Studio Settings</h2>
+              <p class="muted">Configure your social preview identity, RSS sources, templates, and voices.</p>
+            </div>
+            <div class="settings-header-actions">
+              <button type="button" id="btn-settings-templates" class="btn btn-secondary">Manage Templates</button>
+              <button type="button" id="btn-settings-voices" class="btn btn-secondary">Manage Voices</button>
+              <button type="button" id="btn-save-settings" class="btn btn-primary">Save Settings</button>
+            </div>
+          </div>
+
+          <div class="settings-cards">
+            <div class="panel settings-card">
+              <h3>Preview Identity</h3>
+              <p class="muted small">Shown live across LinkedIn, X, and Threads card previews.</p>
+
+              <div class="identity-preview-chip">
+                <div id="cfg-avatar-preview" class="li-avatar li-avatar-md">YN</div>
+                <div class="identity-preview-text">
+                  <div id="cfg-name-preview" class="identity-name">Your Name</div>
+                  <div id="cfg-handle-preview" class="muted small">@yourhandle</div>
+                  <div id="cfg-headline-preview" class="identity-headline">Software Engineer · AI Builder</div>
+                </div>
+              </div>
+
+              <div class="settings-row-2">
+                <div class="field">
+                  <label for="cfg-profile-name">Display Name</label>
+                  <input type="text" id="cfg-profile-name" class="input" />
+                </div>
+                <div class="field">
+                  <label for="cfg-profile-handle">Social @Handle</label>
+                  <input type="text" id="cfg-profile-handle" class="input" placeholder="yourhandle" />
+                </div>
+              </div>
+              <div class="field">
+                <label for="cfg-profile-headline">LinkedIn Headline</label>
+                <input type="text" id="cfg-profile-headline" class="input" />
+              </div>
+            </div>
+
+            <div class="panel settings-card">
+              <div>
+                <h3>RSS / Atom Feeds</h3>
+                <p class="muted small">Sources scanned whenever you click Fetch Feeds in Discover.</p>
+              </div>
+              <div id="feeds-list" class="feeds-list"></div>
+              <div class="add-feed-row">
+                <input type="text" id="new-feed-name" class="input" placeholder="Feed name (e.g. Pragmatic Engineer)" />
+                <input type="url" id="new-feed-url" class="input" placeholder="https://example.com/feed.xml" />
+                <button type="button" id="btn-add-feed" class="btn btn-secondary">Add Feed</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Schedule Post Modal -->
+  <div id="schedule-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="schedule-modal-title">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="schedule-modal-title">Schedule Post for Publishing</h3>
+        <button type="button" id="btn-close-schedule-modal" class="icon-btn" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="sched-draft-title" class="sched-draft-preview"></div>
+
+        <div class="field">
+          <label>Quick Presets</label>
+          <div class="preset-chips">
+            <button type="button" class="chip-btn" data-preset="tomorrow-9">Tomorrow 9:00 AM</button>
+            <button type="button" class="chip-btn" data-preset="plus2-10">In 2 Days 10:00 AM</button>
+            <button type="button" class="chip-btn" data-preset="next-mon-9">Next Mon 9:00 AM</button>
+            <button type="button" class="chip-btn" data-preset="today-18">Today 6:00 PM</button>
+          </div>
+        </div>
+
+        <div class="sched-inputs-row">
+          <div class="field">
+            <label for="sched-date">Publish Date</label>
+            <input type="date" id="sched-date" class="input" />
+          </div>
+          <div class="field">
+            <label for="sched-time">Publish Time</label>
+            <input type="time" id="sched-time" class="input" />
+          </div>
+        </div>
+
+        <div id="sched-relative-hint" class="meter meter-ok"></div>
+        <p class="muted small">Moves post to the Scheduled column. Export .ics for your calendar or copy &amp; publish from the Board when due.</p>
+      </div>
+      <div class="modal-footer modal-footer-split">
+        <div class="modal-footer-left">
+          <button type="button" id="btn-clear-schedule" class="btn btn-danger-ghost">Clear</button>
+          <button type="button" id="btn-export-ics" class="btn btn-secondary">Export .ics</button>
+        </div>
+        <div class="modal-footer-right">
+          <button type="button" id="btn-cancel-schedule" class="btn btn-secondary">Cancel</button>
+          <button type="button" id="btn-save-schedule" class="btn btn-primary">Save Schedule</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Connect AI Model Modal -->
+  <div id="ai-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="ai-modal-title">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h3 id="ai-modal-title">Connect AI Model</h3>
+        <button type="button" id="btn-close-ai-modal" class="icon-btn" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="field">
+          <label>Select Provider</label>
+          <div id="ai-provider-grid" class="provider-grid"></div>
+        </div>
+
+        <div id="ai-config-fields" class="ai-config-fields">
+          <div class="field">
+            <label for="ai-model-input">Model Name</label>
+            <div class="model-row">
+              <input type="text" id="ai-model-input" class="input mono" placeholder="e.g. gpt-4o-mini or llama3.2" />
+              <button type="button" id="btn-ai-fetch-models" class="btn btn-secondary">Fetch Models</button>
+            </div>
+            <div id="ai-model-chips" class="preset-chips"></div>
+          </div>
+
+          <div class="field">
+            <label for="ai-base-url">API Base URL</label>
+            <input type="url" id="ai-base-url" class="input mono" placeholder="https://api.openai.com/v1" />
+          </div>
+
+          <div class="field">
+            <div class="key-label-row">
+              <label for="ai-api-key">API Key</label>
+              <span id="ai-saved-key-badge" class="tag hidden"></span>
+            </div>
+            <div class="key-row">
+              <input type="password" id="ai-api-key" class="input mono" placeholder="Paste API key (stored locally in .ai_secrets.json)" autocomplete="off" />
+              <button type="button" id="btn-toggle-key-vis" class="btn btn-secondary">Show</button>
+              <button type="button" id="btn-clear-ai-key" class="btn btn-danger-ghost hidden">Clear Key</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="key-label-row">
+              <label for="ai-temperature">Creativity (Temperature)</label>
+              <span id="ai-temp-value" class="mono small muted">0.7</span>
+            </div>
+            <input type="range" id="ai-temperature" min="0" max="1.2" step="0.1" value="0.7" />
+          </div>
+        </div>
+
+        <div id="ai-test-result" class="ai-test-result hidden"></div>
+      </div>
+      <div class="modal-footer modal-footer-split">
+        <div class="modal-footer-left">
+          <button type="button" id="btn-ai-test" class="btn btn-secondary">Test Connection</button>
+        </div>
+        <div class="modal-footer-right">
+          <button type="button" id="btn-cancel-ai" class="btn btn-secondary">Cancel</button>
+          <button type="button" id="btn-ai-save" class="btn btn-primary">Save &amp; Connect</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Templates & Voice Profiles Manager Modal -->
+  <div id="presets-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="presets-modal-title">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h3 id="presets-modal-title">AI Prompt Templates &amp; Voice Profiles</h3>
+        <button type="button" id="btn-close-presets-modal" class="icon-btn" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="segmented" role="tablist">
+          <button type="button" id="presets-tab-templates" class="seg-btn active" role="tab">AI Prompt Templates</button>
+          <button type="button" id="presets-tab-voices" class="seg-btn" role="tab">Voice &amp; Tone Profiles</button>
+        </div>
+
+        <div id="presets-list" class="presets-list"></div>
+
+        <div class="preset-editor-card">
+          <h4 id="preset-form-heading">Add New Template</h4>
+          <div class="field">
+            <label for="preset-name-input">Name</label>
+            <input type="text" id="preset-name-input" class="input" placeholder="e.g., 3 Developer Lessons" />
+          </div>
+          <div class="field">
+            <label id="preset-body-label" for="preset-body-input">Prompt Instructions</label>
+            <textarea id="preset-body-input" class="textarea" rows="3" placeholder="Describe how AI should rewrite or structure the post..."></textarea>
+          </div>
+          <div class="preset-form-actions">
+            <button type="button" id="btn-preset-cancel-edit" class="btn btn-xs btn-secondary hidden">Cancel Edit</button>
+            <button type="button" id="btn-preset-save" class="btn btn-primary">Add Template</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="btn-done-presets" class="btn btn-secondary">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- In-App Confirmation Modal -->
+  <div id="confirm-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="confirm-modal-title">Confirm Action</h3>
+        <button type="button" id="btn-close-confirm-modal" class="icon-btn" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <p id="confirm-modal-message" class="muted"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="btn-confirm-cancel" class="btn btn-secondary">Cancel</button>
+        <button type="button" id="btn-confirm-ok" class="btn btn-danger">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
