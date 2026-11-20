@@ -6,6 +6,10 @@
 studio.log
 launch-windows.vbs
 
+# Personal local drafts & rough notes
+queue/
+notes/
+
 # Compiled Python bytecode (contains local absolute file paths!)
 __pycache__/
 *.py[cod]
