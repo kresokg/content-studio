@@ -4,6 +4,7 @@
 .inbox_state.json
 .pipeline_state.json
 studio.log
+launch-windows.vbs
 
 # Compiled Python bytecode (contains local absolute file paths!)
 __pycache__/

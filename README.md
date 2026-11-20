@@ -67,19 +67,24 @@ Most tools for social media writing, scheduling and automating lock your data in
 
 ```text
 content-studio/
-├── studio.py            # Zero-dependency ThreadingHTTPServer + REST API (127.0.0.1:8765)
-├── ai_client.py         # Universal 7-provider LLM client & local 0600 key manager
-├── discover.py          # RSS/Atom inbox state manager & full-article HTML text extractor
-├── pipeline.py          # Standalone CLI batch generator for RSS feeds & Markdown notes
-├── config.json          # Active profile, feeds, AI provider config, templates & voices
-├── launch.sh            # Desktop launcher (starts service/daemon & opens browser)
+├── studio.py             # Zero-dependency ThreadingHTTPServer + REST API (127.0.0.1:8765)
+├── ai_client.py          # Universal 7-provider LLM client & local 0600 key manager
+├── discover.py           # RSS/Atom inbox state manager & full-article HTML text extractor
+├── pipeline.py           # Standalone CLI batch generator for RSS feeds & Markdown notes
+├── install.py            # Universal 1-click installer & launcher (Windows, macOS & Linux)
+├── Install-Windows.bat   # 1-click Windows double-click installer (Desktop/Start Menu + auto-start)
+├── Install-macOS.command # 1-click macOS Finder installer (Applications/Desktop .app + LaunchAgent)
+├── Install-Linux.sh      # 1-click Linux installer (Desktop/App-Menu + systemd user service)
+├── config.json           # Active profile, feeds, AI provider config, templates & voices
+├── launch.sh             # Linux desktop launcher (starts service/daemon & opens browser)
 ├── web/
-│   ├── index.html       # Single-page Studio layout & modals
-│   ├── styles.css       # Obsidian Dark & Daylight Light theme design system
-│   ├── app.js           # Vanilla JS state management, live previews & API client
-│   └── icon.svg         # App launcher icon
-├── queue/YYYY-MM-DD/    # Plain Markdown draft files + daily INDEX.md
-└── notes/               # Plain Markdown/text rough idea notes
+│   ├── index.html        # Single-page Studio layout & modals
+│   ├── styles.css        # Obsidian Dark & Daylight Light theme design system
+│   ├── app.js            # Vanilla JS state management, live previews & API client
+│   ├── icon.svg          # Vector app icon (Linux)
+│   └── icon.ico          # Multi-platform Windows desktop shortcut icon
+├── queue/YYYY-MM-DD/     # Plain Markdown draft files + daily INDEX.md
+└── notes/                # Plain Markdown/text rough idea notes
 ```
 
 ### Runtime State Files (Auto-Generated)
@@ -93,23 +98,31 @@ content-studio/
 
 ---
 
-## Quick Start & Cross-Platform Setup (Linux, Windows & macOS)
+## Quick Start & 1-Click Cross-Platform Install (Linux, Windows & macOS)
 
-Because the entire backend uses **only the Python 3.10+ standard library** (`http.server`, `urllib.request`, `xml.etree.ElementTree`, `pathlib`, `json`, `re`) with OS-agnostic `pathlib.Path` file handling and zero compiled C extensions or third-party packages, it runs identically on **Linux**, **Windows**, and **macOS**.
+Because the entire backend uses **only the Python 3.10+ standard library** (`http.server`, `urllib.request`, `xml.etree.ElementTree`, `pathlib`, `json`, `re`, `zlib`, `struct`) with OS-agnostic `pathlib.Path` handling and zero third-party packages, it runs identically on **Linux**, **Windows**, and **macOS**.
 
-**Prerequisite on any OS:** Python `3.10` or newer installed (`python3 --version` or `python --version`). No `pip install` or virtual environment is required.
+### 1. One-Click Desktop Installation (Recommended)
 
-### 1. Linux
+Run the installer for your operating system **once** — it registers your **Content Studio** Desktop & App-Menu/Start-Menu icon with the **CS** badge, configures background auto-start, and opens **`http://127.0.0.1:8765/`** automatically:
+
+- **Microsoft Windows (10 / 11):**
+  Double-click **`Install-Windows.bat`** (auto-installs Python via `winget` if missing, creates silent `pythonw` **Content Studio** Desktop, Start Menu, and Startup shortcuts).
+- **Apple macOS:**
+  Double-click **`Install-macOS.command`** in Finder (builds **`Content Studio.app`** in `~/Applications` + Desktop and registers a `launchd` login agent).
+- **Linux:**
+  Run `./Install-Linux.sh` (or `python3 install.py`) to set up the `systemd --user` service and trusted **Content Studio** Desktop & App-Menu icons.
+
+After that first click, just click the **Content Studio** icon on your Desktop, Start Menu, or Mac Applications anytime.
+
+### 2. Run Directly in Terminal (All Operating Systems)
 
 ```bash
-# One-click launcher (starts background service if needed and opens browser)
-./launch.sh
-
-# Or run directly in the terminal
 python3 studio.py --host 127.0.0.1 --port 8765
+# Windows: python studio.py --host 127.0.0.1 --port 8765
 ```
 
-Manage the persistent `systemd --user` service:
+Linux `systemd --user` service management:
 
 ```bash
 systemctl --user status linkedin-content-studio.service
@@ -117,55 +130,7 @@ systemctl --user restart linkedin-content-studio.service
 journalctl --user -u linkedin-content-studio.service -f
 ```
 
-### 2. Microsoft Windows (Windows 10 / 11)
-
-Open **PowerShell** or **Command Prompt** in the project folder:
-
-```powershell
-# Start the Web Studio server
-python studio.py --host 127.0.0.1 --port 8765
-
-# Then open in your browser:
-start http://127.0.0.1:8765/
-```
-
-- **One-Click Windows Desktop Shortcut (`launch.bat`):**
-  Create a `launch.bat` file in the project folder and double-click it anytime:
-  ```bat
-  @echo off
-  cd /d "%~dp0"
-  start "" /B pythonw studio.py --host 127.0.0.1 --port 8765
-  timeout /t 1 /nobreak >nul
-  start http://127.0.0.1:8765/
-  ```
-- **Run Automatically on Windows Login:** Place a shortcut to `launch.bat` inside your Windows Startup folder (`Win + R` → type `shell:startup`).
-
-### 3. Apple macOS
-
-Open **Terminal** in the project folder:
-
-```bash
-# Start the Web Studio server
-python3 studio.py --host 127.0.0.1 --port 8765
-
-# Open in your default browser
-open http://127.0.0.1:8765/
-```
-
-- **One-Click Finder / Dock Shortcut (`launch.command`):**
-  Save this as `launch.command` in the project folder and make it executable (`chmod +x launch.command`):
-  ```bash
-  #!/usr/bin/env bash
-  cd "$(dirname "$0")"
-  if ! pgrep -f "studio.py" >/dev/null 2>&1; then
-    nohup python3 studio.py >/tmp/content-studio.log 2>&1 &
-    sleep 0.6
-  fi
-  open "http://127.0.0.1:8765/"
-  ```
-- **Run Automatically on macOS Login:** Add `launch.command` under **System Settings → General → Login Items** (or load a user LaunchAgent plist in `~/Library/LaunchAgents/`).
-
-### 4. Run the Standalone CLI Pipeline (All Operating Systems)
+### 3. Run the Standalone CLI Pipeline (All Operating Systems)
 
 ```bash
 python3 pipeline.py                  # Draft up to max_items_per_run posts from notes + feeds
